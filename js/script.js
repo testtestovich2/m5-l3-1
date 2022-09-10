@@ -13,48 +13,41 @@
 
 "use strict";
 
-const list = document.querySelector(".list");
-let timeout;
+const main = document.querySelector('main');
+const ul = document.createElement('ul');
+main.append(ul);
 
-const isEmpty = (str) => {
-    if (str && str.trim().length) {
-        return true;
+const getUserInput = () => {
+  return prompt('Введите строку');
+};
+
+const addItem = (text) => {
+  const li = document.createElement('li');
+  li.textContent = text;
+  ul.append(li);
+};
+
+const addElement = () => {
+  const userInput = getUserInput();
+  console.log('userInput: ', userInput);
+
+  if (userInput) {
+    switch (userInput) {
+      case 'del':
+        ul.lastChild.remove();
+        break;
+      case 'clear':
+        ul.textContent = '';
+        break;
+      case 'exit':
+        return null;
+      default:
+        if (userInput !== '' || userInput.trim() !== '')
+          addItem(userInput);
+        break;
     }
-    return false;
+  } else return null;
+  return addElement();
 };
 
-const newItem = (str) => {
-    if (str === "clear") {
-        list.innerHTML = "";
-        timeout = setTimeout(() => {
-            alert("Список пуст");
-    }, 0)
-    } else if (str === "del") {
-    list.lastChild.remove();    
-    timeout = setTimeout(() => {
-        alert("Строка удалена");
-    }, 0)
-    } else {
-    const item = document.createElement("li");
-    item.textContent = str;
-    list.append(item);
-    }
-    timeout = setTimeout(start, 300); 
-};
-
-const start = () => {
-    let text;
-
-    do {
-    text = prompt("Введите текст");
-
-    if (text === null || text === "exit") {
-        alert("Пока");
-        return;
-    }    
-    } while(!isEmpty(text))
-    
-    newItem(text);
-};
-
-start();
+addElement();
